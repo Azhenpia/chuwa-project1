@@ -1,5 +1,5 @@
 const express = require("express");
-// const authRouter = require("./routes/authRoutes");
+const authRouter = require("./routes/authRoutes");
 // const productRouter = require("./routes/productRoutes");
 // const cartRouter = require("./routes/cartRoutes");
 const errorHandlerMiddleware = require('./middleware/errorHandler');
@@ -12,7 +12,7 @@ connectDB();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// app.use("/auth", authRouter);
+app.use("/auth", authRouter);
 // app.use("/products", productRouter);
 // app.use("/cart", cartRouter);
 
