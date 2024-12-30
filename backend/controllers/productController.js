@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const { Schema } = mongoose;
+const Product = require('../models/ProductModel'); // 从 ProductModel.js 引入模型
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,40 +15,6 @@ mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB:', err));
-
-// Product Schema
-const productSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  stock: { // Renamed from quantity to stock
-    type: Number,
-    required: true
-  },
-  imgUrl: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-const Product = mongoose.model('Product', productSchema);
 
 // [GET] /products - Get all products with optional filtering, sorting, and pagination
 app.get('/api/products', async (req, res) => {
@@ -107,18 +73,4 @@ app.put('/api/products/:id', async (req, res) => {
 // [DELETE] /products/:id - Delete a product (Admin only)
 app.delete('/api/products/:id', async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.json({ message: 'Product deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to delete product', details: err.message });
-  }
-});
-
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+    const product = await Product.findByIdAndDelete(req.params.i
