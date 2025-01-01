@@ -1,6 +1,6 @@
 const express = require("express");
 const authRouter = require("./routes/authRoutes");
-// const productRouter = require("./routes/productRoutes");
+const productRouter = require("./routes/productRoutes");
 const cartRouter = require("./routes/cartRoutes");
 const errorHandlerMiddleware = require('./middleware/errorHandler');
 const connectDB = require("./config/db");
