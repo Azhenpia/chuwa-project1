@@ -1,17 +1,22 @@
 const express = require("express");
-const {
-  getProducts,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-} = require("../controllers/productController"); // 引入控制器方法
+const { addProduct, updateProduct, deleteProduct, getProducts } = require("../controllers/productController");
+const authToken = require("../middleware/auth");
 
 const router = express.Router();
 
-// 路由定义
-router.get("/", getProducts); // 获取所有产品
-router.post("/", addProduct); // 添加产品
-router.put("/:id", updateProduct); // 更新产品
-router.delete("/:id", deleteProduct); // 删除产品
+// Middleware to check admin role
+const isAdmin = (req, res, next) => {
+  if (req.user?.role !== "admin") {
+    return res.status(403).json({ message: "Access denied. Admins only." });
+  }
+  next();
+};
+
+// Routes
+router.get("/", getProducts); // Public route to get products
+router.post("/", authToken, isAdmin, addProduct); // Protected route for adding products
+router.put("/:id", authToken, isAdmin, updateProduct); // Protected route for updating products
+router.delete("/:id", authToken, isAdmin, deleteProduct); // Protected route for deleting products
 
 module.exports = router;
+
