@@ -2,7 +2,8 @@ const Product = require("../models/ProductModel");
 
 // 获取所有产品
 const getProducts = async (req, res) => {
-  try {
+ if(req.user.role!=="admin"){ res.status(400).json({ error: "Not admin"});}
+   try {
     const { orderBy = "createdAt", order = "asc", page = 1, limit = 10, searchStr } = req.query;
 
     const filter = searchStr
@@ -30,6 +31,7 @@ const getProducts = async (req, res) => {
 
 // 添加新产品
 const addProduct = async (req, res) => {
+   if(req.user.role!=="admin"){ res.status(400).json({ error: "Not admin" });}
   try {
     const product = new Product(req.body);
     await product.save();
@@ -41,6 +43,7 @@ const addProduct = async (req, res) => {
 
 // 更新产品
 const updateProduct = async (req, res) => {
+   if(req.user.role!=="admin"){ res.status(401).json({ error: "Not admin"});}
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!product) {
@@ -54,6 +57,7 @@ const updateProduct = async (req, res) => {
 
 // 删除产品
 const deleteProduct = async (req, res) => {
+   if(req.user.role!=="admin"){ res.status(400).json({ error: "Not admin"});}
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
