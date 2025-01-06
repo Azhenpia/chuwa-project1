@@ -13,6 +13,6 @@ const CustomEditBtn = styled(Button)(({height, width, fontSize, fontWeight}) => 
 
 export default function EditBtn({height, width, fontSize, fontWeight, text, onClick}) {
   return (
-    <CustomEditBtn variant="outlined" height={height} width={width} fontSize={fontSize} onClick={onClick}>{text}</CustomEditBtn>
+    <CustomEditBtn variant="outlined" height={height} width={width} fontSize={fontSize} fontWeight={fontWeight} onClick={onClick}>{text}</CustomEditBtn>
   )
 }
