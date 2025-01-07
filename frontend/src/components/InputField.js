@@ -36,8 +36,7 @@ export default function InputField({height, fontSize, error, helperText, isPassw
       height={height} 
       fontSize={fontSize} 
       error={error} 
-      helperText={helperText} 
-      isPassword={isPassword}
+      helperText={helperText}
       type={isPassword && !showPassword ? "password" : "text"}
       InputProps={{
         endAdornment: isPassword ? (
