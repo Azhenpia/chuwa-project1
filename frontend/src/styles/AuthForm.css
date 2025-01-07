@@ -1,0 +1,43 @@
+form {
+  max-width: 600px;
+  border: 1px solid white;
+  border-radius: 10px;
+  box-shadow: 0 5px 16px 1px rgba(229, 229, 229, 0.8);
+  padding: 20px 50px 80px 50px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.input-field {
+  margin: 20px 0 20px 0;
+}
+
+.input-field label {
+  display: block;
+  color: #6B7280;
+  margin-bottom: 10px;
+}
+
+.submit-btn {
+  margin: 30px 0;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.footer a {
+  color: #5048E5;
+  font-weight: 500;
+}
+
+.role-switch {
+  color: #6B7280;
+}

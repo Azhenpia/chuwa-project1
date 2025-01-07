@@ -10,8 +10,8 @@ const CustomFilledBtn = styled(Button)(({height, width, fontSize, fontWeight}) =
   textTransform: "none",
 }))
 
-export default function FilledBtn({height, width, fontSize, fontWeight, text, onClick}) {
+export default function FilledBtn({height, width, fontSize, fontWeight, text, onClick, ...rest}) {
   return (
-    <CustomFilledBtn variant="contained" height={height} width={width} fontSize={fontSize} fontWeight={fontWeight} onClick={onClick}>{text}</CustomFilledBtn>
+    <CustomFilledBtn variant="contained" height={height} width={width} fontSize={fontSize} fontWeight={fontWeight} onClick={onClick} {...rest}>{text}</CustomFilledBtn>
   )
 }
