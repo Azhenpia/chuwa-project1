@@ -1,6 +1,6 @@
 import { useLocation, Navigate } from "react-router-dom";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import "../styles/AuthForm.css";
+import "../../styles/AuthForm.css";
 
 export default function PasswordSentPage() {
   const location = useLocation();
@@ -10,7 +10,7 @@ export default function PasswordSentPage() {
   }
 
   return (
-    <form className="recovery-link">
+    <form className="auth-form recovery-link">
       <ForwardToInboxIcon style={{ color: "#5048e5", fontSize: "70px" }} />
       <p>
         We have sent the update password link to your email, please check that!

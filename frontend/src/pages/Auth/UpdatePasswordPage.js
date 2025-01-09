@@ -1,7 +1,7 @@
-import FilledBtn from "../components/FilledBtn";
-import InputField from "../components/InputField";
+import FilledBtn from "../../components/FilledBtn";
+import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
-import "../styles/AuthForm.css";
+import "../../styles/AuthForm.css";
 
 export default function UpdatePasswordPage() {
   const navigate = useNavigate();
@@ -12,9 +12,9 @@ export default function UpdatePasswordPage() {
   };
 
   return (
-    <form className="update-form" onSubmit={handleSubmit}>
+    <form className="auth-form update-form" onSubmit={handleSubmit}>
       <h1>Update your password</h1>
-      <p>Enter your email link, we will send you the recovery link</p>
+      <p id="recovery-text">Enter your email link, we will send you the recovery link</p>
       <div className="input-field">
         <label>Email</label>
         <InputField />
