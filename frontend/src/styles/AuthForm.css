@@ -1,4 +1,4 @@
-form {
+.auth-form {
   max-width: 600px;
   border: 1px solid white;
   border-radius: 10px;
@@ -6,38 +6,61 @@ form {
   padding: 20px 50px 80px 50px;
 }
 
-h1 {
+.auth-form h1 {
   text-align: center;
-  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
-.input-field {
+.auth-form .input-field {
   margin: 20px 0 20px 0;
 }
 
-.input-field label {
+.auth-form .input-field label {
   display: block;
-  color: #6B7280;
+  color: #6b7280;
   margin-bottom: 10px;
 }
 
-.submit-btn {
+.auth-form .submit-btn {
   margin: 30px 0;
 }
 
-.footer {
+.auth-form .footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   font-size: 14px;
-  color: #6B7280;
+  color: #6b7280;
 }
 
-.footer a {
-  color: #5048E5;
+.auth-form .footer a {
+  color: #5048e5;
   font-weight: 500;
 }
 
-.role-switch {
-  color: #6B7280;
+.auth-form .role-switch {
+  color: #6b7280;
+}
+
+#recovery-text {
+  text-align: center;
+  color: #6b7280;
+  padding-bottom: 10px;
+}
+
+.recovery-link {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  text-align: center;
+  height: 530px;
+  width: 600px;
+  margin: 0 auto;
+}
+
+.recovery-link p {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 50px;
 }
