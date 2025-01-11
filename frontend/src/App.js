@@ -5,11 +5,13 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Box from '@mui/material/Box';
 import ProductsPage from './pages/ProductsPage';
+import Product from './pages/Product/Product';
 import SignupPage from './pages/Auth/SignupPage';
 import LoginPage from './pages/Auth/LoginPage';
 import UpdatePasswordPage from './pages/Auth/UpdatePasswordPage';
 import PasswordSentPage from './pages/Auth/PasswordSentPage';
 import CreateProductPage from './pages/Product/CreateProductPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const AppContainer = styled(Box)(({theme}) => ({
   display: 'flex',
@@ -34,14 +36,17 @@ function App() {
         <ContentWrapper>
           <Routes>
             <Route path="/" element={<ProductsPage />} />
+            {/* <Route path="/" element={<Product />} /> */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route element={<ProtectedRoute/>}>
             <Route path="/update-password" element={<UpdatePasswordPage />} />
             <Route
               path="/update-password/sent"
               element={<PasswordSentPage />}
             />
             <Route path="create-product" element={<CreateProductPage />} />
+            </Route>
           </Routes>
         </ContentWrapper>
         <Footer />
