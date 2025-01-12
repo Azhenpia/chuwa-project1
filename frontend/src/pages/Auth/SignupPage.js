@@ -1,11 +1,16 @@
-import React, { useState } from "react";
-import FilledBtn from "../../components/FilledBtn";
-import InputField from "../../components/InputField";
-import { Link } from "react-router-dom";
-import "../../styles/AuthForm.css";
-import Switch from "@mui/material/Switch";
+import React, {useState} from 'react';
+import FilledBtn from '../../components/FilledBtn';
+import InputField from '../../components/InputField';
+import {Link, useNavigate} from 'react-router-dom';
+import '../../styles/AuthForm.css';
+import Switch from '@mui/material/Switch';
+import {useDispatch} from 'react-redux';
+import {signupUser} from '../../features/user/userSlice';
 
 export default function SignupPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +27,20 @@ export default function SignupPage() {
     };
     setError(newError);
     if (email && password && !newError.email.hasError && !newError.password.hasError) {
-      console.log("Form submitted", { email, password, isAdmin });
+      try {
+        const form = e.target;
+        dispatch(
+          signupUser({
+            email: form.email.value,
+            password: form.password.value,
+            role: isAdmin ? 'admin' : 'regular',
+          })
+        );
+        console.log('New account created');
+        navigate('/login');
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
 
@@ -111,18 +129,19 @@ export default function SignupPage() {
       <div className="role-switch">
         <span>Are you a seller?*</span>
         <Switch
+          name="role"
           checked={isAdmin}
           onChange={handleSwitchChange}
           sx={{
-            "& .MuiSwitch-thumb": {
-              backgroundColor: isAdmin ? "#5048E5" : "gray",
+            '& .MuiSwitch-thumb': {
+              backgroundColor: isAdmin ? '#5048E5' : 'gray',
             },
-            "& .MuiSwitch-track": {
-              backgroundColor: "lightgray",
+            '& .MuiSwitch-track': {
+              backgroundColor: 'lightgray',
             },
           }}
         />
-        <span>{isAdmin ? "Yes" : "No"}</span>
+        <span>{isAdmin ? 'Yes' : 'No'}</span>
       </div>
       <div className="submit-btn">
         <FilledBtn text="Create account" width="100%" type="submit" />

@@ -29,6 +29,7 @@ export default function InputField({
   helperText,
   isPassword,
   onChange,
+  name,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -46,12 +47,13 @@ export default function InputField({
       helperText={helperText}
       type={isPassword && !showPassword ? "password" : "text"}
       onChange={onChange}
+      name={name}
       InputProps={{
         endAdornment: isPassword ? (
           <InputAdornment position="end">
             <IconButton
               aria-label={
-                showPassword ? "display the password" : "hide the password"
+                showPassword ? 'display the password' : 'hide the password'
               }
               onClick={handleClickShowPassword}
               edge="end"
