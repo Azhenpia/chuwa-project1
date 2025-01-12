@@ -7,13 +7,17 @@ import {useDispatch} from 'react-redux';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {setUser, loginUser} from '../../features/user/userSlice';
 import {jwtDecode} from 'jwt-decode';
+import { CircularProgress } from '@mui/material';
 
 export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const form = e.target;
       const result = await dispatch(
@@ -22,14 +26,21 @@ export default function LoginPage() {
       const {token} = await unwrapResult(result);
       const decoded = jwtDecode(token);
       dispatch(setUser(decoded));
-      console.log('Submitted - LoginPage');
-      navigate('/');
+      
+      console.log('Login Successful');
+      setTimeout(() => {
+        setSuccess(true); 
+        setTimeout(() => navigate("/"), 2000); 
+      }, 2000);
     } catch (err) {
       console.log(err.message);
+      setLoading(false);
     }
   };
 
-  return (
+  return success ? (
+    <h3>Logged in successfully! Redirecting...</h3>
+  ) : (
     <form className="auth-form" onSubmit={handleSubmit}>
       <h1>Sign in to your account</h1>
       <div className="input-field">
@@ -41,7 +52,7 @@ export default function LoginPage() {
         <InputField name="password" isPassword={true} />
       </div>
       <div className="submit-btn">
-        <FilledBtn text="Sign In" width="100%" type="submit" />
+        <FilledBtn text={loading ? <CircularProgress size={20} /> : "Sign In"} width="100%" type="submit" disabled={loading}/>
       </div>
       <div className="footer">
         <span>
