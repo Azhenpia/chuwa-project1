@@ -85,7 +85,7 @@ function Product() {
     justifyContent: "space-between",
     alignItems: "center",
     mb: 2,
-    gap: "16px", // 🟩 调整排序框和按钮之间的间距
+    gap: "16px", //  调整排序框和按钮之间的间距
           }}
         >
           <Typography variant="h4">Products</Typography>
@@ -93,7 +93,7 @@ function Product() {
           <Box
           sx={{
             display: "flex",
-            gap: "8px", // 🟩 设置排序框和按钮之间的距离
+            gap: "8px", //  设置排序框和按钮之间的距离
             alignItems: "center",
           }}
           >
