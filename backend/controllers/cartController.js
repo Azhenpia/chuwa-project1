@@ -12,7 +12,7 @@ const getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({userId}).populate({
       path: 'items.product',
-      select: '_id name price description stock img_url',
+      select: '_id name price description stock imgUrl',
     });
 
     if (!cart) {
@@ -148,7 +148,7 @@ const mergeCart = async (req, res) => {
     // Reload updated cart with product details
     const updatedCart = await Cart.findOne({userId}).populate(
       'items.product',
-      '_id name price description stock img_url'
+      '_id name price description stock imgUrl'
     );
 
     return res
@@ -314,7 +314,7 @@ const applyDiscount = async (req, res) => {
 const getProductDetails = async (cart) => {
   await cart.populate(
     'items.product',
-    '_id name price description stock img_url'
+    '_id name price description stock imgUrl'
   );
 };
 
