@@ -35,11 +35,12 @@ function App() {
         <Header />
         <ContentWrapper>
           <Routes>
-            <Route path="/" element={<ProductsPage />} />
-            {/* <Route path="/" element={<Product />} /> */}
+            {/*<Route path="/" element={<ProductsPage />} />*/}
+            <Route path="/" element={<Product />} /> 
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route element={<ProtectedRoute/>}>
+            <Route element={<ProtectedRoute/>}>              
+             {/* 之后可以把path"/"放进来 */}
             <Route path="/update-password" element={<UpdatePasswordPage />} />
             <Route
               path="/update-password/sent"
