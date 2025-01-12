@@ -8,7 +8,6 @@ import {   Grid,
   Typography, } from "@mui/material";
 import ProductCard from "../../features/products/ProductCard";
 import {useFetchProductsQuery, useUpdateCartMutation} from '../../features/api/apiSlice';
-import { blueGrey, yellow } from "@mui/material/colors";
 const style = {
   productGrid: {
     display: "flex",

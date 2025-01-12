@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Box from '@mui/material/Box';
-import ProductsPage from './pages/ProductsPage';
 import Product from './pages/Product/Product';
 import SignupPage from './pages/Auth/SignupPage';
 import LoginPage from './pages/Auth/LoginPage';
@@ -17,6 +16,7 @@ const AppContainer = styled(Box)(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   minHeight: '100vh',
+  backgroundColor: '#f9fafb',
 }));
 
 const ContentWrapper = styled(Box)(({theme}) => ({
@@ -35,19 +35,14 @@ function App() {
         <Header />
         <ContentWrapper>
           <Routes>
-            {/*<Route path="/" element={<ProductsPage />} />*/}
             <Route path="/" element={<Product />} /> 
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route element={<ProtectedRoute/>}>              
-             {/* 之后可以把path"/"放进来 */}
             <Route path="/update-password" element={<UpdatePasswordPage />} />
-            <Route
-              path="/update-password/sent"
-              element={<PasswordSentPage />}
-            />
-            <Route path="create-product" element={<CreateProductPage />} />
-            </Route>
+            <Route path="/update-password/sent" element={<PasswordSentPage />}/>
+            {/* <Route element={<ProtectedRoute/>}> */}
+              <Route path="create-product" element={<CreateProductPage />} />
+            {/* </Route> */}
           </Routes>
         </ContentWrapper>
         <Footer />
