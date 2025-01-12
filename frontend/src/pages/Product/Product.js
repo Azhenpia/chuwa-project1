@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';//
 import {   Grid,
   Button,
   Menu,
@@ -119,7 +120,7 @@ function Product() {
               Price: high to low
             </MenuItem>
           </Menu>
-          <Button variant="contained">Add Product</Button>
+          <Button variant="contained"  onClick={()=>{navigate('/create-product')}>Add Product</Button>//点击到添加product页面
           </Box>
           {/* -------------- */}
         </Box>
