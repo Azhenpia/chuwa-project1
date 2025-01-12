@@ -1,24 +1,24 @@
-import React, {useState} from 'react';
-import {TextField, styled, InputAdornment, IconButton} from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import React, { useState } from "react";
+import { TextField, styled, InputAdornment, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const CustomizedInput = styled(TextField)(({height, fontSize}) => ({
-  height: height || '56px',
-  '& .MuiInputBase-input': {
-    fontSize: fontSize || '16px',
+const CustomizedInput = styled(TextField)(({ height, fontSize }) => ({
+  height: height || "56px",
+  "& .MuiInputBase-input": {
+    fontSize: fontSize || "16px",
   },
-  '& .MuiOutlinedInput-root': {
-    '&.Mui-focused fieldset': {
-      borderColor: '#5048E5',
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "#5048E5",
     },
   },
-  '&.Mui-error fieldset': {
-    borderColor: '#FC5A44',
+  "&.Mui-error fieldset": {
+    borderColor: "#FC5A44",
   },
-  '& .MuiFormHelperText-root': {
-    fontSize: '14px',
-    color: '#FC5A44',
-    textAlign: 'right',
+  "& .MuiFormHelperText-root": {
+    fontSize: "14px",
+    color: "#FC5A44",
+    textAlign: "right",
   },
 }));
 
@@ -28,6 +28,7 @@ export default function InputField({
   error,
   helperText,
   isPassword,
+  onChange,
   name,
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +45,8 @@ export default function InputField({
       fontSize={fontSize}
       error={error}
       helperText={helperText}
-      type={isPassword && !showPassword ? 'password' : 'text'}
+      type={isPassword && !showPassword ? "password" : "text"}
+      onChange={onChange}
       name={name}
       InputProps={{
         endAdornment: isPassword ? (
