@@ -1,43 +1,51 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import { TextField, styled, InputAdornment, IconButton } from "@mui/material";
-import { Visibility, VisibilityOff }from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const CustomizedInput = styled(TextField)(({height, fontSize}) => ({
+const CustomizedInput = styled(TextField)(({ height, fontSize }) => ({
   height: height || "56px",
   "& .MuiInputBase-input": {
-    fontSize: fontSize || "16px",  
+    fontSize: fontSize || "16px",
   },
   "& .MuiOutlinedInput-root": {
     "&.Mui-focused fieldset": {
-      borderColor: "#5048E5", 
+      borderColor: "#5048E5",
     },
   },
   "&.Mui-error fieldset": {
-    borderColor: "#FC5A44", 
+    borderColor: "#FC5A44",
   },
   "& .MuiFormHelperText-root": {
-    fontSize: "14px",  
-    color: "#FC5A44", 
+    fontSize: "14px",
+    color: "#FC5A44",
     textAlign: "right",
   },
-}))
+}));
 
-export default function InputField({height, fontSize, error, helperText, isPassword}) {
-  const [showPassword, setShowPassword] = useState(false)
+export default function InputField({
+  height,
+  fontSize,
+  error,
+  helperText,
+  isPassword,
+  onChange,
+}) {
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
-    setShowPassword((show) => !show)
-  }
+    setShowPassword((show) => !show);
+  };
 
   return (
-    <CustomizedInput 
-      hiddenLabel 
-      fullWidth 
-      height={height} 
-      fontSize={fontSize} 
-      error={error} 
+    <CustomizedInput
+      hiddenLabel
+      fullWidth
+      height={height}
+      fontSize={fontSize}
+      error={error}
       helperText={helperText}
       type={isPassword && !showPassword ? "password" : "text"}
+      onChange={onChange}
       InputProps={{
         endAdornment: isPassword ? (
           <InputAdornment position="end">
@@ -54,5 +62,5 @@ export default function InputField({height, fontSize, error, helperText, isPassw
         ) : null,
       }}
     />
-  )
+  );
 }
