@@ -11,6 +11,7 @@ import UpdatePasswordPage from './pages/Auth/UpdatePasswordPage';
 import PasswordSentPage from './pages/Auth/PasswordSentPage';
 import CreateProductPage from './pages/Product/CreateProductPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorPage from './pages/ErrorPage';
 
 const AppContainer = styled(Box)(({theme}) => ({
   display: 'flex',
@@ -43,6 +44,7 @@ function App() {
             {/* <Route element={<ProtectedRoute/>}> */}
               <Route path="create-product" element={<CreateProductPage />} />
             {/* </Route> */}
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </ContentWrapper>
         <Footer />
