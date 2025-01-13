@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
+const CustomAPIError = require("../errors");
+const bcrypt = require('bcryptjs');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -7,12 +9,15 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
     // Check if user exists
     if (!user) {
-      throw new CustomAPIError("Invalid Credentials", 400);
-    }
-    // Check if password match
-    if (user.password !== password) {
+      // throw new CustomAPIError("Invalid Credentials", 400);
       return res.status(400).json({ message: "Invalid Credentials" });
     }
+    // Check if password match
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Credentials" });
+    }
+    
     const payload = {
       user: {
         id: user._id,
@@ -39,7 +44,13 @@ const signup = async (req, res, next) => {
     }
 
     // Create new user
-    const newUser = new User(req.body);
+    const salt = await bcrypt.genSalt(10); 
+    const hashedPassword = await bcrypt.hash(password, salt); 
+    const newUser = new User({
+      email,
+      password: hashedPassword, 
+      role,
+    });
     await newUser.save();
 
     res.status(201).json({

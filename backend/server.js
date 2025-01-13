@@ -15,9 +15,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/auth', authRouter);
-// app.use("/products", productRouter);
 app.use('/cart', cartRouter);
-app.use('/products', productRouter); // 注册产品路由
+app.use('/products', productRouter);
 app.use(errorHandlerMiddleware);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
