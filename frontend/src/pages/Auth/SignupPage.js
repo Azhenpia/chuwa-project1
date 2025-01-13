@@ -21,8 +21,9 @@ export default function SignupPage() {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [duplicateErr, setDuplicateErr] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const fields = {
@@ -40,20 +41,33 @@ export default function SignupPage() {
     ) {
       setLoading(true);
       try {
-        dispatch(
+        await dispatch(
           signupUser({
             ...fields,
             role: isAdmin ? "admin" : "regular",
           })
-        );
+        ).unwrap();
+
         console.log("New account created");
         setTimeout(() => {
           setSuccess(true); 
           setTimeout(() => navigate("/login"), 2000); 
         }, 2000);
       } catch (err) {
-        console.log(err.message);
-        setLoading(false);
+        if (err.message === "User already exists") {
+          setDuplicateErr("An account with this email already exists, please log in");
+          setLoading(false)
+        } else {
+          console.log(err.message);
+          setTimeout(() => {
+            navigate("/error", { 
+              state: { 
+                hasError: "true",
+                message: {err}
+              }
+            });
+          }, 2000);
+        }
       } 
     }
   };
@@ -167,6 +181,7 @@ export default function SignupPage() {
         />
         <span>{isAdmin ? "Yes" : "No"}</span>
       </div>
+      {duplicateErr && <p className="auth-error-message">{duplicateErr}</p>}
       <div className="submit-btn">
         <FilledBtn
           text={loading ? <CircularProgress size={20} /> : "Create account"}

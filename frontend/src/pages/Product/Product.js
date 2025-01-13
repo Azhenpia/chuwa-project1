@@ -121,7 +121,7 @@ function Product() {
               Price: high to low
             </MenuItem>
           </Menu>
-          <Button variant="contained"  onClick={()=>{navigate('/create-product')}}>Add Product</Button>//点击到添加product页面
+          <Button variant="contained"  onClick={()=>{navigate('/create-product')}}>Add Product</Button>
           </Box>
           {/* -------------- */}
         </Box>
