@@ -36,13 +36,16 @@ function App() {
         <Header />
         <ContentWrapper>
           <Routes>
-            <Route path="/" element={<Product />} /> 
+            <Route path="/" element={<Product />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/update-password" element={<UpdatePasswordPage />} />
-            <Route path="/update-password/sent" element={<PasswordSentPage />}/>
+            <Route
+              path="/update-password/sent"
+              element={<PasswordSentPage />}
+            />
             {/* <Route element={<ProtectedRoute/>}> */}
-              <Route path="create-product" element={<CreateProductPage />} />
+            <Route path="create-product" element={<CreateProductPage />} />
             {/* </Route> */}
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
