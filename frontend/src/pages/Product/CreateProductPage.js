@@ -10,11 +10,13 @@ import {
   InputAdornment,
   FormHelperText,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import "../../styles/Product.css";
 import { styled } from "@mui/material/styles";
-import { useCreateProductMutation } from "../../features/api/apiSlice"; 
+import { useCreateProductMutation } from "../../features/api/apiSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -29,6 +31,8 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function CreateProductPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -47,11 +51,12 @@ export default function CreateProductPage() {
     imgUrl: { hasError: false, errContent: "" },
   });
   const [createProduct, { isLoading, isError }] = useCreateProductMutation();
+  const [success, setSuccess] = useState(false);
 
   const validateField = (name, value) => {
     if (name === "price" || name === "stock") {
       if (isNaN(value) || value <= 0) {
-        return { hasError: true, errContent: `${name} must be a valid number greater than 0` };
+        return { hasError: true, errContent: `${name} not valid` };
       }
     } else {
       if (!value || value.trim() === "") {
@@ -66,7 +71,7 @@ export default function CreateProductPage() {
     if (field === "price" || field === "stock") {
       setFormData((prev) => ({
         ...prev,
-        [field]: Number(value), 
+        [field]: Number(value),
       }));
     } else {
       setFormData((prev) => ({
@@ -91,10 +96,20 @@ export default function CreateProductPage() {
 
     if (!hasErrors) {
       try {
-        await createProduct(formData).unwrap(); 
-        console.log("Product created:", formData); 
-      } catch (error) {
-        console.error("Failed to create product:", error); 
+        await createProduct(formData).unwrap();
+        console.log("Product created:", formData);
+        setSuccess(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (err) {
+        console.log("Product creation error " + err.message);
+        navigate("/error", {
+          state: {
+            hasError: "true",
+            message: { err },
+          },
+        });
       }
     }
   };
@@ -104,17 +119,25 @@ export default function CreateProductPage() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImagePreview(reader.result); 
+        setImagePreview(reader.result);
         setFormData((prev) => ({
           ...prev,
-          imgUrl: reader.result, 
+          imgUrl: reader.result,
         }));
       };
-      reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
+      setErrors((prev) => ({
+        ...prev,
+        imgUrl: { hasError: false, errContent: "" },
+      }));
     }
   };
 
-  return (
+  return success ? (
+    <div>
+      <h3>Product created successfully! Redirecting to home page...</h3>
+    </div>
+  ) : (
     <div className="create-product-page">
       <div className="product-form">
         <h1>Create Product</h1>
@@ -166,7 +189,9 @@ export default function CreateProductPage() {
                   <MenuItem value="clothing">Clothing</MenuItem>
                 </Select>
                 {errors.category.hasError && (
-                  <FormHelperText style={{ fontSize: "14px", textAlign: "right" }} >
+                  <FormHelperText
+                    style={{ fontSize: "14px", textAlign: "right" }}
+                  >
                     {errors.category.errContent}
                   </FormHelperText>
                 )}
@@ -233,6 +258,13 @@ export default function CreateProductPage() {
                 FormHelperTextProps={{
                   style: { fontSize: "14px", textAlign: "right" },
                 }}
+                sx={{
+                  ...(errors.imgUrl.hasError && {
+                    "& fieldset": {
+                      borderColor: "#d4342c !important",
+                    },
+                  }),
+                }}
               />
             </div>
           </div>
@@ -251,7 +283,12 @@ export default function CreateProductPage() {
             )}
           </div>
           <div className="submit-btn">
-            <FilledBtn text="Add Product" width="150px" type="submit" />
+            <FilledBtn
+              text={isLoading ? <CircularProgress size={20} /> : "Add Product"}
+              width="150px"
+              type="submit"
+              disabled={isLoading}
+            />
           </div>
         </form>
       </div>
