@@ -30,12 +30,10 @@ export const updateItemsAsync = createAsyncThunk(
 
 export const fetchCartAsync = createAsyncThunk(
   'cart/fetchCartAsync',
-  async (_, {getState, dispatch}) => {
-    if (getState().user.isAuthenticated) {
-      const response = await dispatch(apiSlice.endpoints.fetchCart.initiate());
-      dispatch(updateCart(response.data));
-      return response.data.cart;
-    }
+  async (_, {dispatch}) => {
+    const response = await dispatch(apiSlice.endpoints.fetchCart.initiate());
+    dispatch(updateCart(response.data));
+    return response.data.cart;
   }
 );
 
@@ -58,7 +56,11 @@ const cartSlice = createSlice({
       state.discount = updates.discount;
     },
     clearCart: (state, _) => {
-      state = initialState;
+      state.items = [];
+      state.subtotal = 0;
+      state.tax = 0;
+      state.estimatedTotal = 0;
+      state.discount = 0;
     },
     updateItems: (state, action) => {
       const {product, quantity} = action.payload;

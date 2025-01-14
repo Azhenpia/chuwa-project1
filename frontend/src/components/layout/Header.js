@@ -14,8 +14,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearUser} from '../../features/user/userSlice';
 import {useNavigate, useLocation} from 'react-router';
 import Cart from '../../features/cart/Cart';
-import {updateCart, toggleCart} from '../../features/cart/cartSlice';
-import {useFetchCartQuery} from '../../features/api/apiSlice';
+import {
+  toggleCart,
+  clearCart,
+  fetchCartAsync,
+} from '../../features/cart/cartSlice';
 
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
@@ -81,17 +84,21 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    data: fetchedCart,
-    isSuccess,
-    isLoading,
-  } = useFetchCartQuery(undefined, {
-    skip: !user.isAuthenticated || cart?.items?.length > 0,
-  });
-
   useEffect(() => {
-    if (fetchedCart) dispatch(updateCart(fetchedCart));
-  }, [fetchedCart, isSuccess, dispatch]);
+    console.log('qaq');
+    const fetchCart = async () => {
+      if (user.isAuthenticated && cart?.items?.length === 0) {
+        try {
+          await dispatch(fetchCartAsync());
+          console.log('Cart fetched successfully');
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+        }
+      }
+    };
+
+    fetchCart();
+  }, [cart?.items?.length, dispatch, user.isAuthenticated]);
 
   return (
     <Box sx={{flexGrow: 1}}>
@@ -162,7 +169,12 @@ const Header = () => {
               <AccountCircle />
             </IconButton>
             {user.isAuthenticated && (
-              <SignoutBtn onClick={() => dispatch(clearUser())}>
+              <SignoutBtn
+                onClick={() => {
+                  dispatch(clearUser());
+                  dispatch(clearCart());
+                }}
+              >
                 Sign Out
               </SignoutBtn>
             )}
