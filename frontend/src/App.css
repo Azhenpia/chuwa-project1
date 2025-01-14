@@ -29,3 +29,9 @@ h1 {
   justify-content: center;
   flex-direction: column;
 }
+
+@media (max-width: 600px) {
+  .error-page {
+    text-align: center;
+  }
+}
