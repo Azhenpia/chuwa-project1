@@ -57,7 +57,6 @@ export default function CreateUpdateProductPage({isEdit}) {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    console.log(product)
     if (isEdit && product) {
       setFormData({
         name: product.name,
@@ -73,8 +72,26 @@ export default function CreateUpdateProductPage({isEdit}) {
 
   const validateField = (name, value) => {
     if (name === "price" || name === "stock") {
-      if (isNaN(value) || value <= 0) {
+      if (isNaN(value) || value <= 0 || value.slice(-1) === ".") {
         return { hasError: true, errContent: `${name} not valid` };
+      } 
+      
+      const decimals = value.split(".")[1];
+      if (name === "stock") {
+        if (value > 9999) {
+          return { hasError: true, errContent: `max 9999` };
+        } 
+        if (decimals) {
+          return { hasError: true, errContent: "whole number only" };
+        }
+      }
+      if (name === "price") {
+        if (decimals && decimals.length > 2) {
+          return { hasError: true, errContent: "max 2 decimals" };
+        }
+        if (value > 10000) {
+          return { hasError: true, errContent: `max $10000` };
+        }
       }
     } else {
       if (!value || value.trim() === "") {
@@ -87,10 +104,12 @@ export default function CreateUpdateProductPage({isEdit}) {
   const handleChange = (field) => (e) => {
     const value = e.target.value;
     if (field === "price" || field === "stock") {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: Number(value),
-      }));
+      if (value === "" || !isNaN(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          [field]: value, 
+        }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
