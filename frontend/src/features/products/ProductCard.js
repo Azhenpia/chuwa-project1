@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   Card,
   CardContent,
@@ -6,19 +6,18 @@ import {
   Typography,
   Button,
   Box,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateItemsAsync} from '../cart/cartSlice';
 
-function ProductCard({ product }) {
-  const [quantity, setQuantity] = useState(0);
-
-  const handleAddClick = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleRemoveClick = () => {
-    setQuantity((prev) => Math.max(0, prev - 1));
+function ProductCard({product}) {
+  const dispatch = useDispatch();
+  const {items} = useSelector((state) => state.cart);
+  const handleQuantityChange = async (newQuantity) => {
+    await dispatch(updateItemsAsync({product, quantity: newQuantity}));
+    console.log(items);
   };
 
   return (
@@ -34,55 +33,68 @@ function ProductCard({ product }) {
           <Typography variant="h6">{product.name}</Typography>
           <Typography variant="body1">${product.price.toFixed(2)}</Typography>
         </CardContent>
-        <Box sx={{ textAlign: "center", mt: 1, mb: 1 ,display: "flex",
-            gap: "8px", // 🟩 设置排序框和按钮之间的距离
-            alignItems: "center",}}>
+        <Box
+          sx={{
+            textAlign: 'center',
+            mt: 1,
+            mb: 1,
+            display: 'flex',
+            gap: '8px',
+            alignItems: 'center',
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
             sx={{
-              width: "100px", // 固定按钮宽度
-              height: "40px", // 固定按钮高度
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textTransform: "none", // 禁用全大写
+              width: '100px',
+              height: '40px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textTransform: 'none',
             }}
-            onClick={() => (quantity === 0 ? handleAddClick() : null)}
+            onClick={() => {
+              if (product.quantity === 0) handleQuantityChange(1);
+            }}
           >
-            {quantity === 0 ? (
-              "ADD"
+            {product.quantity === 0 ? (
+              'ADD'
             ) : (
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px", // 图标和数字之间的间距
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
                 }}
               >
                 <RemoveIcon
                   fontSize="small"
-                  sx={{ cursor: "pointer" }}
+                  sx={{cursor: 'pointer'}}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleRemoveClick();
+                    handleQuantityChange(product.quantity - 1);
                   }}
                 />
-                <Typography variant="body2" sx={{ color: "white" }}>
-                  {quantity}
+                <Typography variant="body2" sx={{color: 'white'}}>
+                  {product.quantity}
                 </Typography>
                 <AddIcon
                   fontSize="small"
-                  sx={{ cursor: "pointer" }}
+                  sx={{cursor: 'pointer'}}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleAddClick();
+                    handleQuantityChange(product.quantity + 1);
                   }}
                 />
               </Box>
             )}
           </Button>
-          <Button size="small" variant="outlined" sx={{width:"100px",height:"40px"}}>
+          <Button
+            size="small"
+            variant="outlined"
+            sx={{width: '100px', height: '40px'}}
+          >
             Edit
           </Button>
         </Box>
@@ -92,4 +104,3 @@ function ProductCard({ product }) {
 }
 
 export default ProductCard;
-

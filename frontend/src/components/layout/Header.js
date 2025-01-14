@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import {styled, alpha} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -12,7 +12,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearUser} from '../../features/user/userSlice';
-import {useNavigate} from 'react-router';
+import {useNavigate, useLocation} from 'react-router';
+import Cart from '../../features/cart/Cart';
+import {updateCart, toggleCart} from '../../features/cart/cartSlice';
+import {useFetchCartQuery} from '../../features/api/apiSlice';
 
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
@@ -72,8 +75,23 @@ const SignoutBtn = styled(Typography)(({theme}) => ({
 
 const Header = () => {
   const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart);
+  const {estimatedTotal, isExpanded} = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const {
+    data: fetchedCart,
+    isSuccess,
+    isLoading,
+  } = useFetchCartQuery(undefined, {
+    skip: !user.isAuthenticated || cart?.items?.length > 0,
+  });
+
+  useEffect(() => {
+    if (fetchedCart) dispatch(updateCart(fetchedCart));
+  }, [fetchedCart, isSuccess, dispatch]);
 
   return (
     <Box sx={{flexGrow: 1}}>
@@ -88,7 +106,11 @@ const Header = () => {
               fontWeight: 700,
               paddingLeft: 5,
               display: {xs: 'none', sm: 'block'},
+              '&:hover': {
+                cursor: 'pointer',
+              },
             }}
+            onClick={() => navigate('/')}
           >
             Management{' '}
             <Typography component="b" sx={{fontSize: 10, fontWeight: 600}}>
@@ -105,6 +127,7 @@ const Header = () => {
               fontWeight: 700,
               display: {xs: 'block', sm: 'none'},
             }}
+            onClick={() => navigate('/')}
           >
             M
           </Typography>
@@ -143,23 +166,30 @@ const Header = () => {
                 Sign Out
               </SignoutBtn>
             )}
-            <IconButton
-              size="large"
-              aria-label="show cart items"
-              color="inherit"
-            >
-              <Badge badgeContent={0} color="error">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            <Typography
-              variant="body1"
-              sx={{display: {xs: 'none', sm: 'block'}}}
-            >
-              $0.00
-            </Typography>
+            {location.pathname === '/' && (
+              <>
+                <IconButton
+                  size="large"
+                  aria-label="show cart items"
+                  color="inherit"
+                  onClick={() => dispatch(toggleCart())}
+                >
+                  <Badge badgeContent={0} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+                <Typography
+                  variant="body1"
+                  sx={{display: {xs: 'none', sm: 'block'}}}
+                >
+                  ${estimatedTotal?.toFixed(2)}
+                </Typography>
+              </>
+            )}
           </Box>
         </Toolbar>
+
+        {isExpanded && <Cart />}
 
         {/* Mobile: search bar on second level */}
         <Box
