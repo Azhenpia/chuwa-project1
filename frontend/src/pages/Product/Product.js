@@ -149,7 +149,7 @@ function Product() {
           {/* -------------- */}
         </Box>
         <Box>
-          <Box sx={style.productGrid} style={{marginTop: '16px'}}>
+          <Box sx={style.productGrid} style={{marginTop: '16px',justifyContent:"left"}}>
             {currentProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
