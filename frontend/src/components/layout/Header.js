@@ -85,7 +85,6 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log('qaq');
     const fetchCart = async () => {
       if (user.isAuthenticated && cart?.items?.length === 0) {
         try {
