@@ -34,6 +34,7 @@ export default function QuantityEditBtn({product, setProduct}) {
             height: '100%',
             textTransform: 'none',
             backgroundColor: '#5048E5',
+            borderRadius: 3,
           }}
           onClick={(event) => {
             event.stopPropagation();
