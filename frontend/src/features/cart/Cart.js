@@ -14,13 +14,15 @@ export default function Cart() {
   const [deleteItem] = useDeleteProductMutation();
   const location = useLocation();
   const dispatch = useDispatch();
-  if (location.pathname !== '/') {
+  if (
+    location.pathname !== '/' &&
+    !location.pathname.startsWith('/product-detail')
+  ) {
     dispatch(closeCart());
     return <></>;
   }
 
   const handleQuantityChange = (product) => async (newQuantity) => {
-    console.log(newQuantity);
     await dispatch(updateItemsAsync({product, quantity: newQuantity}));
   };
 
@@ -44,13 +46,12 @@ export default function Cart() {
       }}
     >
       <CartHeader />
-      {console.log(items)}
 
       <Box sx={{flex: 1, overflowY: 'auto', mx: 6}}>
         {items.length > 0 ? (
           items.map((item) => (
             <CartItem
-              key={item._id}
+              key={item.product._id}
               product={item.product}
               quantity={item.quantity}
               onQuantityChange={handleQuantityChange(item.product)}

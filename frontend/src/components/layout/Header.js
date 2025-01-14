@@ -99,6 +99,10 @@ const Header = () => {
     fetchCart();
   }, [cart?.items?.length, dispatch, user.isAuthenticated]);
 
+  const shouldShowCartIcon =
+    location.pathname.startsWith('/') ||
+    location.pathname.startsWith('/product-detail');
+
   return (
     <Box>
       <AppBar position="static" sx={{backgroundColor: '#121c36'}}>
@@ -177,7 +181,7 @@ const Header = () => {
                 Sign Out
               </SignoutBtn>
             )}
-            {location.pathname === '/' && (
+            {shouldShowCartIcon && (
               <>
                 <IconButton
                   size="large"

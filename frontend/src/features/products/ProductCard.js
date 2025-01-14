@@ -17,7 +17,8 @@ function ProductCard({product}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEditClick = () => {
+  const handleEditClick = (event) => {
+    event.stopPropagation();
     navigate(`/edit-product/${product._id}`, {state: {product}});
   };
 
@@ -25,87 +26,90 @@ function ProductCard({product}) {
     await dispatch(updateItemsAsync({product, quantity: newQuantity}));
   };
 
+  const handleProductClick = () => {
+    navigate(`/product-detail/${product._id}`, {state: {product}});
+  };
+
   return (
-    <div>
-      <Card>
-        <CardMedia
-          component="img"
-          height="140"
-          image={product.imgUrl}
-          alt={product.name}
-        />
-        <CardContent>
-          <Typography variant="h6">{product.name}</Typography>
-          <Typography variant="body1">${product.price.toFixed(2)}</Typography>
-        </CardContent>
-        <Box
+    <Card onClick={handleProductClick}>
+      <CardMedia
+        component="img"
+        height="140"
+        image={product.imgUrl}
+        alt={product.name}
+      />
+      <CardContent>
+        <Typography variant="h6">{product.name}</Typography>
+        <Typography variant="body1">${product.price.toFixed(2)}</Typography>
+      </CardContent>
+      <Box
+        sx={{
+          textAlign: 'center',
+          mt: 1,
+          mb: 1,
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
           sx={{
-            textAlign: 'center',
-            mt: 1,
-            mb: 1,
+            width: '100px',
+            height: '40px',
             display: 'flex',
-            gap: '8px',
+            justifyContent: 'center',
             alignItems: 'center',
+            textTransform: 'none',
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            if (product.quantity === 0) handleQuantityChange(1);
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              width: '100px',
-              height: '40px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              textTransform: 'none',
-            }}
-            onClick={() => {
-              if (product.quantity === 0) handleQuantityChange(1);
-            }}
-          >
-            {product.quantity === 0 ? (
-              'ADD'
-            ) : (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
+          {product.quantity === 0 ? (
+            'ADD'
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <RemoveIcon
+                fontSize="small"
+                sx={{cursor: 'pointer'}}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleQuantityChange(product.quantity - 1);
                 }}
-              >
-                <RemoveIcon
-                  fontSize="small"
-                  sx={{cursor: 'pointer'}}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleQuantityChange(product.quantity - 1);
-                  }}
-                />
-                <Typography variant="body2" sx={{color: 'white'}}>
-                  {product.quantity}
-                </Typography>
-                <AddIcon
-                  fontSize="small"
-                  sx={{cursor: 'pointer'}}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleQuantityChange(product.quantity + 1);
-                  }}
-                />
-              </Box>
-            )}
-          </Button>
-          <Button
-            size="small"
-            variant="outlined"
-            sx={{width: '100px', height: '40px'}}
-            onClick={handleEditClick}
-          >
-            Edit
-          </Button>
-        </Box>
-      </Card>
-    </div>
+              />
+              <Typography variant="body2" sx={{color: 'white'}}>
+                {product.quantity}
+              </Typography>
+              <AddIcon
+                fontSize="small"
+                sx={{cursor: 'pointer'}}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleQuantityChange(product.quantity + 1);
+                }}
+              />
+            </Box>
+          )}
+        </Button>
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{width: '100px', height: '40px'}}
+          onClick={handleEditClick}
+        >
+          Edit
+        </Button>
+      </Box>
+    </Card>
   );
 }
 
