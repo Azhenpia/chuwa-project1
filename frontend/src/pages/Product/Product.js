@@ -31,6 +31,11 @@ function Product() {
   const [updateCart] = useUpdateCartMutation();
   const navigate = useNavigate();
 
+  const handleAddClick = () => {
+    const type = "add";
+    navigate('/CreateProductPage', {state: {product,type}});
+  };
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortOption, setSortOption] = useState('Price: low to high');
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,7 +147,7 @@ function Product() {
             <Button
               variant="contained"
               onClick={() => {
-                navigate('/create-product');
+                handleAddClick
               }}
             >
               Add Product
