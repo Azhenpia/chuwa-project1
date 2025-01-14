@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 
 const ProductDetailPage = () => {
   const cart = useSelector((state) => state.cart.items);
+  const {currentUser} = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
   const initialProduct = location.state?.product;
@@ -124,14 +125,16 @@ const ProductDetailPage = () => {
             }}
           >
             <QuantityEditBtn product={product} setProduct={setProduct} />
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="large"
-              onClick={handleEditClick}
-            >
-              Edit
-            </Button>
+            {currentUser?.role === 'admin' && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="large"
+                onClick={handleEditClick}
+              >
+                Edit
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>
