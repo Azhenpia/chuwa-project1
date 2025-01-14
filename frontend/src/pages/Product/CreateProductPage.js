@@ -9,46 +9,58 @@ import {
   OutlinedInput,
   InputAdornment,
   FormHelperText,
+  Button,
+  CircularProgress,
 } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import "../../styles/Product.css";
+import { styled } from "@mui/material/styles";
+import { useCreateProductMutation } from "../../features/api/apiSlice";
+import { Link, useNavigate } from "react-router-dom";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 export default function CreateProductPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     category: "",
-    price: "",
-    stock: "",
-    imageUrl: "https://",
+    price: 0,
+    stock: 0,
+    imgUrl: "",
   });
-
+  const [imagePreview, setImagePreview] = useState("");
   const [errors, setErrors] = useState({
     name: { hasError: false, errContent: "" },
     description: { hasError: false, errContent: "" },
     category: { hasError: false, errContent: "" },
     price: { hasError: false, errContent: "" },
     stock: { hasError: false, errContent: "" },
-    imageUrl: { hasError: false, errContent: "" },
+    imgUrl: { hasError: false, errContent: "" },
   });
+  const [createProduct, { isLoading, isError }] = useCreateProductMutation();
+  const [success, setSuccess] = useState(false);
 
   const validateField = (name, value) => {
-    if (!value || value.trim() === "") {
-      return { hasError: true, errContent: `${name} required` };
-    }
-    if (name === "price") {
-      if (isNaN(value) || parseFloat(value) <= 0) {
-        return { hasError: true, errContent: "Price Invalid" };
+    if (name === "price" || name === "stock") {
+      if (isNaN(value) || value <= 0) {
+        return { hasError: true, errContent: `${name} not valid` };
       }
-    }
-    if (name === "stock") {
-      if (isNaN(value) || parseInt(value) < 0) {
-        return { hasError: true, errContent: "Quantity Invalid" };
-      }
-    }
-    if (name === "imageUrl") {
-      if (formData.imageUrl === "" || formData.imageUrl === "https://") {
-        return { hasError: true, errContent: "image required" };
+    } else {
+      if (!value || value.trim() === "") {
+        return { hasError: true, errContent: `${name} required` };
       }
     }
     return { hasError: false, errContent: "" };
@@ -56,18 +68,24 @@ export default function CreateProductPage() {
 
   const handleChange = (field) => (e) => {
     const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
+    if (field === "price" || field === "stock") {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: Number(value),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
     setErrors((prev) => ({
       ...prev,
       [field]: validateField(field, value),
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     Object.keys(formData).forEach((field) => {
@@ -77,15 +95,49 @@ export default function CreateProductPage() {
     const hasErrors = Object.values(newErrors).some((error) => error.hasError);
 
     if (!hasErrors) {
-      console.log("Form submitted:", formData);
+      try {
+        await createProduct(formData).unwrap();
+        console.log("Product created:", formData);
+        setSuccess(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (err) {
+        console.log("Product creation error " + err.message);
+        navigate("/error", {
+          state: {
+            hasError: "true",
+            message: { err },
+          },
+        });
+      }
     }
   };
 
-  const handleImageUpload = () => {
-    // Image upload logic here
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result);
+        setFormData((prev) => ({
+          ...prev,
+          imgUrl: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+      setErrors((prev) => ({
+        ...prev,
+        imgUrl: { hasError: false, errContent: "" },
+      }));
+    }
   };
 
-  return (
+  return success ? (
+    <div>
+      <h3>Product created successfully! Redirecting to home page...</h3>
+    </div>
+  ) : (
     <div className="create-product-page">
       <div className="product-form">
         <h1>Create Product</h1>
@@ -111,10 +163,10 @@ export default function CreateProductPage() {
               error={errors.description.hasError}
               helperText={errors.description.errContent}
               InputProps={{
-                style: { fontSize: "16px" }, 
+                style: { fontSize: "16px" },
               }}
               FormHelperTextProps={{
-                style: { fontSize: "14px", textAlign: "right" }, 
+                style: { fontSize: "14px", textAlign: "right" },
               }}
             />
           </div>
@@ -137,7 +189,11 @@ export default function CreateProductPage() {
                   <MenuItem value="clothing">Clothing</MenuItem>
                 </Select>
                 {errors.category.hasError && (
-                  <FormHelperText style={{ fontSize: "14px", textAlign: "right" }}>{errors.category.errContent}</FormHelperText>
+                  <FormHelperText
+                    style={{ fontSize: "14px", textAlign: "right" }}
+                  >
+                    {errors.category.errContent}
+                  </FormHelperText>
                 )}
               </FormControl>
             </div>
@@ -165,35 +221,74 @@ export default function CreateProductPage() {
               <label>Add Image Link</label>
               <TextField
                 variant="outlined"
+                disabled
                 fullWidth
-                value={formData.imageUrl}
-                onChange={handleChange("imageUrl")}
-                error={errors.imageUrl.hasError}
-                helperText={errors.imageUrl.errContent}
+                value={formData.imgUrl}
+                onChange={handleChange("imgUrl")}
+                error={errors.imgUrl.hasError}
+                helperText={errors.imgUrl.errContent}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
-                      <FilledBtn
-                        text="Upload"
-                        width="90px"
-                        onClick={handleImageUpload}
-                      />
+                    <InputAdornment position="end" sx={{ marginTop: "10px" }}>
+                      <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        sx={{
+                          width: "90px",
+                          height: "40px",
+                          margin: 0,
+                          fontSize: "14px",
+                          textTransform: "none",
+                          backgroundColor: "#5048E5",
+                          color: "white !important",
+                        }}
+                      >
+                        Upload
+                        <VisuallyHiddenInput
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                        />
+                      </Button>
                     </InputAdornment>
                   ),
-                  style: { fontSize: "16px" }, 
+                  style: { fontSize: "16px" },
                 }}
                 FormHelperTextProps={{
-                  style: { fontSize: "14px", textAlign: "right" }, 
+                  style: { fontSize: "14px", textAlign: "right" },
+                }}
+                sx={{
+                  ...(errors.imgUrl.hasError && {
+                    "& fieldset": {
+                      borderColor: "#d4342c !important",
+                    },
+                  }),
                 }}
               />
             </div>
           </div>
           <div className="img-preview">
-            <ImageIcon style={{ color: "#E5E5E5", fontSize: "50px" }} />
-            <p>Image Preview</p>
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                style={{ maxWidth: "100%", maxHeight: "200px" }}
+              />
+            ) : (
+              <>
+                <ImageIcon style={{ color: "#E5E5E5", fontSize: "50px" }} />
+                <p>Image Preview</p>
+              </>
+            )}
           </div>
           <div className="submit-btn">
-            <FilledBtn text="Add Product" width="150px" type="submit" />
+            <FilledBtn
+              text={isLoading ? <CircularProgress size={20} /> : "Add Product"}
+              width="150px"
+              type="submit"
+              disabled={isLoading}
+            />
           </div>
         </form>
       </div>
