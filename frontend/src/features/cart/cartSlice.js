@@ -69,7 +69,7 @@ const cartSlice = createSlice({
       if (existingItem) {
         existingItem.quantity = quantity;
       } else {
-        state.items.push({product, quantity});
+        state.items = [...state.items, {product, quantity}];
       }
       state.items.subtotal += quantityDiff * product.price;
     },

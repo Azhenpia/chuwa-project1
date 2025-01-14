@@ -7,10 +7,10 @@ const StepperInputWrapper = styled(Box)(({theme}) => ({
   alignItems: 'center',
   padding: 0,
   border: `1px solid`,
-  borderRadius: 1,
+  borderRadius: 3,
   backgroundColor: 'white',
   '& .MuiTypography-root': {
-    border: `1px solid gray`,
+    border: `inherit`,
     borderTop: 0,
     borderBottom: 0,
     px: 1,
@@ -29,6 +29,7 @@ const NumberText = styled(Typography)(({theme}) => ({
 }));
 
 export default function StepperInput({
+  textColor,
   bgColor,
   borderColor,
   quantity,
@@ -50,16 +51,17 @@ export default function StepperInput({
   return (
     <StepperInputWrapper
       sx={{
+        color: textColor || 'black',
         borderColor: borderColor || 'gray',
         backgroundColor: bgColor || 'white',
       }}
     >
       <IconButton onClick={handleDecrement} disabled={quantity <= min}>
-        <RemoveIcon />
+        <RemoveIcon sx={{color: textColor || 'black'}} />
       </IconButton>
       <NumberText>{quantity}</NumberText>
       <IconButton onClick={handleIncrement}>
-        <AddIcon />
+        <AddIcon sx={{color: textColor || 'black'}} />
       </IconButton>
     </StepperInputWrapper>
   );
