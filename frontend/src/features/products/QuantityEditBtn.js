@@ -1,4 +1,4 @@
-import {Button} from '@mui/material';
+import {Box, Button} from '@mui/material';
 import StepperInput from '../../components/StepperInput';
 import {useDispatch} from 'react-redux';
 import {updateItemsAsync} from '../cart/cartSlice';
@@ -14,25 +14,35 @@ export default function QuantityEditBtn({product, setProduct}) {
   };
 
   return (
-    <Button
-      variant="contained"
-      color="primary"
+    <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         textTransform: 'none',
         backgroundColor: '#5048E5',
+        borderRadius: 3,
         width: 120,
         height: 40,
       }}
-      onClick={(event) => {
-        event.stopPropagation();
-        if (product.quantity === 0) handleQuantityChange(1);
-      }}
     >
       {product.quantity === 0 ? (
-        'ADD'
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{
+            height: '100%',
+            textTransform: 'none',
+            backgroundColor: '#5048E5',
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleQuantityChange(1);
+          }}
+        >
+          ADD
+        </Button>
       ) : (
         <StepperInput
           textColor="white"
@@ -43,6 +53,6 @@ export default function QuantityEditBtn({product, setProduct}) {
           max={product.stock}
         />
       )}
-    </Button>
+    </Box>
   );
 }
