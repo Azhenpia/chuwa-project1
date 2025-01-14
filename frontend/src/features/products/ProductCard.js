@@ -18,8 +18,10 @@ function ProductCard({product}) {
   const navigate = useNavigate();
 
   const handleEditClick = () => {
-    navigate('/EditProductPage', {state: {product}});
+    const type = "edit";
+    navigate('/CreateProductPage', {state: {product,type}});
   };
+  
   const {items} = useSelector((state) => state.cart);
   const handleQuantityChange = async (newQuantity) => {
     await dispatch(updateItemsAsync({product, quantity: newQuantity}));
