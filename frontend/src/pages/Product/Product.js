@@ -38,6 +38,12 @@ function Product() {
   const itemsPerPage = 12;
 
   useEffect(() => {
+    if (error) {
+      navigate('/error', { state: { hasError: true } });
+    }
+  }, [error, navigate]);
+
+  useEffect(() => {
     if (data && data.products) {
       if (items) {
         const cartMap = new Map(

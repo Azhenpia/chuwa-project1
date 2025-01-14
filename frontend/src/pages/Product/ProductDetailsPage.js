@@ -13,6 +13,12 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(initialProduct);
 
   useEffect(() => {
+    if (!initialProduct) {
+      navigate('/error', {state: {hasError: true}});
+    }
+  }, [initialProduct, navigate]);
+
+  useEffect(() => {
     const cartItem = cart.find((item) => item.product._id === product._id);
     setProduct((prev) => ({
       ...prev,

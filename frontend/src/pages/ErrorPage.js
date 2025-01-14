@@ -1,12 +1,13 @@
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import FilledBtn from "../components/FilledBtn";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function ErrorPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!location.state?.hasError) {
+  const hasError = location.state?.hasError;
+  if (!hasError && location.pathname === "/error") {
     return <Navigate to="/" />;
   }
 
