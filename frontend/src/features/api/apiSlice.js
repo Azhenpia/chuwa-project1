@@ -35,14 +35,14 @@ export const apiSlice = createApi({
     }),
     updateProduct: builder.mutation({
       query: ({id, ...updatedProduct}) => ({
-        url: `producuts/${id}`,
+        url: `products/${id}`,
         method: 'PUT',
         body: updatedProduct,
       }),
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
-        url: `producuts/${id}`,
+        url: `products/${id}`,
         method: 'DELETE',
       }),
     }),

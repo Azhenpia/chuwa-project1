@@ -30,6 +30,7 @@ export default function InputField({
   isPassword,
   onChange,
   name,
+  value,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,6 +49,7 @@ export default function InputField({
       type={isPassword && !showPassword ? "password" : "text"}
       onChange={onChange}
       name={name}
+      value={value}
       InputProps={{
         endAdornment: isPassword ? (
           <InputAdornment position="end">
