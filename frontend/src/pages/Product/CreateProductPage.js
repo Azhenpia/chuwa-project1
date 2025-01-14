@@ -71,12 +71,14 @@ export default function CreateUpdateProductPage({isEdit}) {
   }, [isEdit, product]);
 
   const validateField = (name, value) => {
+    const stringVal = String(value).trim();
+
     if (name === "price" || name === "stock") {
-      if (isNaN(value) || value <= 0 || value.slice(-1) === ".") {
+      if (isNaN(value) || value <= 0 || stringVal.endsWith(".")) {
         return { hasError: true, errContent: `${name} not valid` };
       } 
-      
-      const decimals = value.split(".")[1];
+
+      const decimals = stringVal.split(".")[1];
       if (name === "stock") {
         if (value > 9999) {
           return { hasError: true, errContent: `max 9999` };
