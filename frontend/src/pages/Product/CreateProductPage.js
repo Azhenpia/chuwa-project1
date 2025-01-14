@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputField from "../../components/InputField";
 import FilledBtn from "../../components/FilledBtn";
 import {
@@ -15,8 +15,8 @@ import {
 import ImageIcon from "@mui/icons-material/Image";
 import "../../styles/Product.css";
 import { styled } from "@mui/material/styles";
-import { useCreateProductMutation } from "../../features/api/apiSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useCreateProductMutation, useUpdateProductMutation } from "../../features/api/apiSlice";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -30,8 +30,10 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function CreateProductPage() {
+export default function CreateUpdateProductPage({isEdit}) {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const product = state?.product;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,8 +52,24 @@ export default function CreateProductPage() {
     stock: { hasError: false, errContent: "" },
     imgUrl: { hasError: false, errContent: "" },
   });
-  const [createProduct, { isLoading, isError }] = useCreateProductMutation();
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdating}] = useUpdateProductMutation();
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    console.log(product)
+    if (isEdit && product) {
+      setFormData({
+        name: product.name,
+        description: product.description,
+        category: product.category,
+        price: product.price,
+        stock: product.stock,
+        imgUrl: product.imgUrl,
+      });
+      setImagePreview(product.imgUrl);
+    }
+  }, [isEdit, product]);
 
   const validateField = (name, value) => {
     if (name === "price" || name === "stock") {
@@ -96,14 +114,23 @@ export default function CreateProductPage() {
 
     if (!hasErrors) {
       try {
-        await createProduct(formData).unwrap();
-        console.log("Product created:", formData);
+        if (isEdit) {
+          const updatedProduct = {
+            id: product._id, 
+            ...formData,    
+          };
+          await updateProduct(updatedProduct).unwrap();
+          console.log("Product updated:", formData);
+        } else {
+          await createProduct(formData).unwrap();
+          console.log("Product created:", formData);
+        }
         setSuccess(true);
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } catch (err) {
-        console.log("Product creation error " + err.message);
+        console.log("Product creation / update error " + err.message);
         navigate("/error", {
           state: {
             hasError: "true",
@@ -135,11 +162,11 @@ export default function CreateProductPage() {
 
   return success ? (
     <div>
-      <h3>Product created successfully! Redirecting to home page...</h3>
+      <h3>{isEdit ? "Product updated" : "Product created"} successfully! Redirecting to home page...</h3>
     </div>
   ) : (
     <div className="create-product-page">
-      <h1>Create Product</h1>
+      <h1>{isEdit ? "Edit Product" : "Create Product"}</h1>
       <form className="product-form" onSubmit={handleSubmit}>
         <div className="info-input">
           <label>Product Name</label>
@@ -283,10 +310,10 @@ export default function CreateProductPage() {
         </div>
         <div className="submit-btn">
           <FilledBtn
-            text={isLoading ? <CircularProgress size={20} /> : "Add Product"}
-            width="150px"
+            text={isCreating || isUpdating ? <CircularProgress size={20} /> : isEdit ? "Update Product" : "Add Product"}
+            width="160px"
             type="submit"
-            disabled={isLoading}
+            disabled={isCreating || isUpdating}
           />
         </div>
       </form>

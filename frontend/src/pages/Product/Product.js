@@ -31,11 +31,6 @@ function Product() {
   const [updateCart] = useUpdateCartMutation();
   const navigate = useNavigate();
 
-  const handleAddClick = () => {
-    const type = "add";
-    navigate('/CreateProductPage', {state: {product,type}});
-  };
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortOption, setSortOption] = useState('Price: low to high');
   const [currentPage, setCurrentPage] = useState(1);
@@ -146,9 +141,7 @@ function Product() {
             </Menu>
             <Button
               variant="contained"
-              onClick={() => {
-                handleAddClick
-              }}
+              onClick={() => {navigate('/create-product')}}
             >
               Add Product
             </Button>
@@ -158,7 +151,7 @@ function Product() {
         <Box>
           <Box sx={style.productGrid} style={{marginTop: '16px'}}>
             {currentProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </Box>
           <Box sx={{display: 'flex', justifyContent: 'center', mt: 4}}>
