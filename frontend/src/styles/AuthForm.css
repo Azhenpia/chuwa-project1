@@ -69,3 +69,18 @@
 .auth-error-message {
   color: red;
 }
+
+@media (max-width: 600px) {
+  .auth-form {
+    padding: 10px 20px;
+  }
+
+  .auth-form .footer {
+    flex-direction: column; 
+    text-align: center;
+  }
+
+  .auth-form .footer span {
+    margin-bottom: 20px; 
+  }
+}

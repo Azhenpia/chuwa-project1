@@ -1,16 +1,13 @@
 .create-product-page {
   background-color: #f9fafb;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 50px;
+  max-width: 660px;
+  width: 100%;
 }
 
 .product-form {
-  max-width: 660px;
-}
-
-.product-form form {
-  width: 660px;
   background-color: white;
   padding: 40px 50px;
   display: flex;              
@@ -64,9 +61,31 @@
   margin: 0 auto;
   margin-bottom: 30px;
   height: 200px;
-  width: 388px;
+  width: 100%;  
+  max-width: 388px;  
   border: 1px dashed #CCCCCC;
   color: #6B7280;
   font-size: 16px;
   font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .create-product-page {
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .product-form {
+    padding: 50px 20px;
+    width: 100%;
+  }
+
+  .product-form .category-price {
+    flex-direction: column;
+  }
+
+  .product-form .stock-img {
+    flex-direction: column;
+  }
 }
