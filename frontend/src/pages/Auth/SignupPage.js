@@ -165,7 +165,7 @@ export default function SignupPage() {
         />
       </div>
       <div className="role-switch">
-        <span>Are you a seller?*</span>
+        <span>Are you an admin?*</span>
         <Switch
           name="role"
           checked={isAdmin}
