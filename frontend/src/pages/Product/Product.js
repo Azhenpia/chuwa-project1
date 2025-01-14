@@ -102,8 +102,8 @@ function Product() {
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
 
   return (
-    <div>
-      <Box sx={{mt: 4}}>
+    <Box sx={{width: "100%", height: {xs: 'auto', sm: '750px'}, display:"flex", justifyContent: "left", alignItems: "start", padding: "0 50px"}}>
+      <Box sx={{mt: 4, width: "100%"}}>
         <Box
           sx={{
             display: 'flex',
@@ -111,6 +111,7 @@ function Product() {
             alignItems: 'center',
             mb: 2,
             gap: '16px', //  调整排序框和按钮之间的间距
+            flexDirection: {xs: 'column', sm: 'row'}
           }}
         >
           <Typography variant="h4">Products</Typography>
@@ -155,7 +156,7 @@ function Product() {
           {/* -------------- */}
         </Box>
         <Box>
-          <Box sx={style.productGrid} style={{marginTop: '16px',justifyContent:"left"}}>
+          <Box sx={style.productGrid} style={{marginTop: '16px',justifyContent:{xs: 'center', sm: 'left'}}}>
             {currentProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
@@ -170,7 +171,7 @@ function Product() {
           </Box>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 

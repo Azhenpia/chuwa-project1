@@ -28,6 +28,7 @@ const ContentWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  // justifyContent: "left", alignItems: "start"
 }));
 
 function App() {
