@@ -14,6 +14,11 @@ import {updateItemsAsync} from '../cart/cartSlice';
 
 function ProductCard({product}) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleEditClick = () => {
+    navigate('/EditProductPage', { state: { product } });
+  };
   const {items} = useSelector((state) => state.cart);
   const handleQuantityChange = async (newQuantity) => {
     await dispatch(updateItemsAsync({product, quantity: newQuantity}));
@@ -93,7 +98,7 @@ function ProductCard({product}) {
           <Button
             size="small"
             variant="outlined"
-            sx={{width: '100px', height: '40px'}}
+            sx={{width: '100px', height: '40px'}} onClick={handleEditClick}
           >
             Edit
           </Button>
