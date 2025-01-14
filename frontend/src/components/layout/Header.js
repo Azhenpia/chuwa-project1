@@ -100,7 +100,7 @@ const Header = () => {
   }, [cart?.items?.length, dispatch, user.isAuthenticated]);
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box>
       <AppBar position="static" sx={{backgroundColor: '#121c36'}}>
         <Toolbar>
           {/* Logo */}

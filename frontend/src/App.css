@@ -1,4 +1,4 @@
-html,
+/* html,
 body,
 #root {
   margin: 0;
@@ -6,12 +6,12 @@ body,
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-}
+} */
 
-:root {
+/* :root {
   --header-height: 60px;
   --footer-height: 60px;
-}
+} */
 
 h1 {
   color: #111827;
