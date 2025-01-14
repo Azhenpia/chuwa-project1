@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateItemsAsync} from '../cart/cartSlice';
+import {useNavigate} from 'react-router-dom'; 
 
 function ProductCard({product}) {
   const dispatch = useDispatch();

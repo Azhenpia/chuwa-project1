@@ -45,9 +45,9 @@ function App() {
               path="/update-password/sent"
               element={<PasswordSentPage />}
             />
-            <Route path="EditProductPage" element={<EditProductPage />} /
             {/* <Route element={<ProtectedRoute/>}> */}
               <Route path="/create-product" element={<CreateProductPage />} />
+              <Route path="EditProductPage" element={<EditProductPage />} />
             {/* </Route> */}
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
