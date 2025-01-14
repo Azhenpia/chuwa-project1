@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom'; 
+import {useNavigate} from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -39,16 +39,18 @@ function Product() {
 
   useEffect(() => {
     if (data && data.products) {
-      const cartMap = new Map(items);
-      console.log(cartMap);
-      let trans = data.products.map((product) => ({
-        ...product,
-        quantity: cartMap.get(product._id) || 0,
-      }));
-      console.log(trans);
-      setSortedProducts(trans);
+      if (items) {
+        const cartMap = new Map(
+          items.map((item) => [item.product._id, item.quantity])
+        );
+        let trans = data.products.map((product) => ({
+          ...product,
+          quantity: cartMap.get(product._id) || 0,
+        }));
+        setSortedProducts(trans);
+      }
     }
-  }, [data]);
+  }, [data, items]);
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
@@ -92,7 +94,6 @@ function Product() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
-  console.log(currentProducts);
 
   return (
     <div>
