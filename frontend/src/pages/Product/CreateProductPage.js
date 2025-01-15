@@ -148,7 +148,7 @@ export default function CreateUpdateProductPage({isEdit}) {
         }
         setSuccess(true);
         setTimeout(() => {
-          navigate("/");
+          navigate("/",{ state: { updated: true } });
         }, 2000);
       } catch (err) {
         console.log("Product creation / update error " + err.message);
