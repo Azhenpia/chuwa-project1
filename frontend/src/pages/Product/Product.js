@@ -30,6 +30,7 @@ function Product() {
   const {data, error, isLoading, refetch} = useFetchProductsQuery({});
   const [updateCart] = useUpdateCartMutation();
   const navigate = useNavigate();
+  const {currentUser} = useSelector((state) => state.user);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortOption, setSortOption] = useState('Price: low to high');
@@ -162,15 +163,17 @@ function Product() {
                 Price: high to low
               </MenuItem>
             </Menu>
-            <Button
-              variant="contained"
-              onClick={() => {
-                navigate('/create-product');
-              }}
-              sx={{backgroundColor: '#5048E5'}}
-            >
-              Add Product
-            </Button>
+            {currentUser?.role === 'admin' && (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  navigate('/create-product');
+                }}
+                sx={{backgroundColor: '#5048E5'}}
+              >
+                Add Product
+              </Button>
+            )}
           </Box>
           {/* -------------- */}
         </Box>
