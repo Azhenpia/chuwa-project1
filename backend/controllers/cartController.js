@@ -273,7 +273,7 @@ const applyDiscount = async (req, res) => {
     // TODO: Implement discount in database
     const discountTable = new Map([
       ['SAVE10', {amount: 10, expires: '2024-12-31'}],
-      ['WELCOME20', {amount: 20, expires: '2025-01-15'}],
+      ['WELCOME20', {amount: 20, expires: '2025-01-20'}],
     ]);
 
     const discount = discountTable.get(code);

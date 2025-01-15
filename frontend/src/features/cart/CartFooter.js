@@ -37,6 +37,14 @@ export default function CartFooter() {
       navigate('/', {state: {updated: true}});
     } catch (err) {
       console.error('Failure happened during checkout:', err.message);
+      setTimeout(() => {
+        navigate('/error', {
+          state: {
+            hasError: 'true',
+            message: {err},
+          },
+        });
+      }, 2000);
     }
   };
 
