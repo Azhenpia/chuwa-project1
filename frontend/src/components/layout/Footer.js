@@ -7,16 +7,16 @@ import "../../styles/Footer.css";
 const Footer = () => {
   return (
     <footer>
-      <div class="social-links">
+      <div className="social-links">
         <YouTubeIcon className="icon" style={{ color: "white", fontSize: "25px" }} />
         <TwitterIcon className="icon" style={{ color: "white", fontSize: "25px" }} />
         <FacebookIcon className="icon" style={{ color: "white", fontSize: "25px" }} />
       </div>
-      <div class="copyright">©2022 All Rights Reserved.</div>
-      <div class="links">
-        <a href="" class="link">Contact Us</a>
-        <a href="" class="link">Privacy Policies</a>
-        <a href="" class="link">Help</a>
+      <div className="copyright">©2022 All Rights Reserved.</div>
+      <div className="links">
+        <a href="" className="link">Contact Us</a>
+        <a href="" className="link">Privacy Policies</a>
+        <a href="" className="link">Help</a>
       </div>
     </footer>
   );
