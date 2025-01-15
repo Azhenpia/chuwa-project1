@@ -100,7 +100,7 @@ const Header = () => {
   }, [cart?.items?.length, dispatch, user.isAuthenticated]);
 
   const shouldShowCartIcon =
-    location.pathname.startsWith('/') ||
+    location.pathname === '/' ||
     location.pathname.startsWith('/product-detail');
 
   return (
@@ -167,7 +167,9 @@ const Header = () => {
             <IconButton
               size="large"
               color="inherit"
-              onClick={() => navigate('/login')}
+              onClick={() => {
+                if (!user.isAuthenticated) navigate('/login');
+              }}
             >
               <AccountCircle />
             </IconButton>

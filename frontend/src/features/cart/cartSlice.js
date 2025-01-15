@@ -31,7 +31,9 @@ export const updateItemsAsync = createAsyncThunk(
 export const fetchCartAsync = createAsyncThunk(
   'cart/fetchCartAsync',
   async (_, {dispatch}) => {
-    const response = await dispatch(apiSlice.endpoints.fetchCart.initiate());
+    const response = await dispatch(
+      apiSlice.endpoints.fetchCart.initiate(undefined, {forceRefetch: true})
+    );
     dispatch(updateCart(response.data));
     return response.data.cart;
   }
@@ -64,14 +66,25 @@ const cartSlice = createSlice({
     },
     updateItems: (state, action) => {
       const {product, quantity} = action.payload;
-      const existingItem = state.items.find((item) => item.id === product.id);
+      const existingItem = state.items.find(
+        (item) => item.product._id === product._id
+      );
       const quantityDiff = quantity - (existingItem?.quantity ?? 0);
       if (existingItem) {
-        existingItem.quantity = quantity;
+        if (quantity === 0) {
+          state.items = state.items.filter(
+            (item) => item.product._id !== product._id
+          );
+        } else {
+          state.items = state.items.map((item) =>
+            item.product._id === product._id ? {product, quantity} : item
+          );
+        }
       } else {
         state.items = [...state.items, {product, quantity}];
       }
-      state.items.subtotal += quantityDiff * product.price;
+      state.subtotal += quantityDiff * product.price;
+      state.estimatedTotal = state.subtotal;
     },
   },
   extraReducers: (builder) => {

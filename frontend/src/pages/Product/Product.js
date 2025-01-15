@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -8,46 +8,45 @@ import {
   Box,
   Pagination,
   Typography,
-} from "@mui/material";
-import ProductCard from "../../features/products/ProductCard";
+} from '@mui/material';
+import ProductCard from '../../features/products/ProductCard';
 import {
   useFetchProductsQuery,
   useUpdateCartMutation,
-} from "../../features/api/apiSlice";
-import { useSelector } from "react-redux";
+} from '../../features/api/apiSlice';
+import {useSelector} from 'react-redux';
 
 const style = {
   productGrid: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    gap: "16px",
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    gap: '16px',
   },
 };
 
 function Product() {
-  const { items } = useSelector((state) => state.cart);
-  const { data, error, isLoading, refetch } = useFetchProductsQuery({});
+  const {items} = useSelector((state) => state.cart);
+  const {data, error, isLoading, refetch} = useFetchProductsQuery({});
   const [updateCart] = useUpdateCartMutation();
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [sortOption, setSortOption] = useState("Price: low to high");
+  const [sortOption, setSortOption] = useState('Price: low to high');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedProducts, setSortedProducts] = useState([]);
   const itemsPerPage = 12;
 
-
   const location = useLocation(); // 获取整个 location 对象
   useEffect(() => {
-  if (location.state?.updated) {
-    refetch(); // 重新获取数据
-   }
- }, [location.state]);
-  
+    if (location.state?.updated) {
+      refetch(); // 重新获取数据
+    }
+  }, [location.state]);
+
   useEffect(() => {
     if (error) {
-      navigate("/error", { state: { hasError: true } });
+      navigate('/error', {state: {hasError: true}});
     }
   }, [error, navigate]);
 
@@ -79,11 +78,11 @@ function Product() {
       setSortOption(option);
     }
     let sortedProducts = [...data.products];
-    if (option === "Price: low to high") {
+    if (option === 'Price: low to high') {
       sortedProducts.sort((a, b) => a.price - b.price);
-    } else if (option === "Price: high to low") {
+    } else if (option === 'Price: high to low') {
       sortedProducts.sort((a, b) => b.price - a.price);
-    } else if (option === "Last added") {
+    } else if (option === 'Last added') {
       sortedProducts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -112,32 +111,32 @@ function Product() {
   return (
     <Box
       sx={{
-        width: "100%",
-        height: { xs: "auto", sm: "750px" },
-        display: "flex",
-        justifyContent: "left",
-        alignItems: "start",
-        padding: "0 50px",
+        width: '100%',
+        height: {xs: 'auto', sm: '750px'},
+        display: 'flex',
+        justifyContent: 'left',
+        alignItems: 'start',
+        padding: '0 50px',
       }}
     >
-      <Box sx={{ mt: 4, width: "100%", height: "100%", position: "relative" }}>
+      <Box sx={{mt: 4, width: '100%', height: '100%', position: 'relative'}}>
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             mb: 2,
-            gap: "16px", //  调整排序框和按钮之间的间距
-            flexDirection: { xs: "column", sm: "row" },
+            gap: '16px', //  调整排序框和按钮之间的间距
+            flexDirection: {xs: 'column', sm: 'row'},
           }}
         >
           <Typography variant="h4">Products</Typography>
           {/* ---------------- */}
           <Box
             sx={{
-              display: "flex",
-              gap: "8px", //  设置排序框和按钮之间的距离
-              alignItems: "center",
+              display: 'flex',
+              gap: '8px', //  设置排序框和按钮之间的距离
+              alignItems: 'center',
             }}
           >
             <Button
@@ -153,22 +152,22 @@ function Product() {
               open={Boolean(anchorEl)}
               onClose={() => handleSortClose()}
             >
-              <MenuItem onClick={() => handleSortClose("Last added")}>
+              <MenuItem onClick={() => handleSortClose('Last added')}>
                 Last added
               </MenuItem>
-              <MenuItem onClick={() => handleSortClose("Price: low to high")}>
+              <MenuItem onClick={() => handleSortClose('Price: low to high')}>
                 Price: low to high
               </MenuItem>
-              <MenuItem onClick={() => handleSortClose("Price: high to low")}>
+              <MenuItem onClick={() => handleSortClose('Price: high to low')}>
                 Price: high to low
               </MenuItem>
             </Menu>
             <Button
               variant="contained"
               onClick={() => {
-                navigate("/create-product");
+                navigate('/create-product');
               }}
-              sx={{ backgroundColor: "#5048E5" }}
+              sx={{backgroundColor: '#5048E5'}}
             >
               Add Product
             </Button>
@@ -178,15 +177,15 @@ function Product() {
         <Box>
           <Box
             sx={{
-              display: "grid",
+              display: 'grid',
               gridTemplateColumns: {
-                xs: "repeat(1, 1fr)",
-                sm: "repeat(6, 1fr)",
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(6, 1fr)',
               },
               gap: 2,
               marginTop: 2,
-              justifyItems: "center",
-              justifyContent: { xs: "center", sm: "left" },
+              justifyItems: 'center',
+              justifyContent: {xs: 'center', sm: 'left'},
             }}
           >
             {currentProducts.map((product) => (
@@ -197,11 +196,11 @@ function Product() {
         <Box
           sx={{
             mt: 4,
-            position: {xs: "static", sm: "absolute"},
-            bottom: "40px",
-            right: "0",
-            display: {xs: "flex"},
-            justifyContent: {xs: "center"}
+            position: {xs: 'static', sm: 'absolute'},
+            bottom: '40px',
+            right: '0',
+            display: {xs: 'flex'},
+            justifyContent: {xs: 'center'},
           }}
         >
           <Pagination

@@ -9,6 +9,7 @@ export const apiSlice = createApi({
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
+      headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
       return headers;
     },
   }),

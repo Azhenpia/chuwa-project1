@@ -106,7 +106,7 @@ const mergeCart = async (req, res) => {
 
     // Step2: Build a map of existing product IDs for quick lookup
     const existingProductMap = new Map(
-      cart.items.map((item) => [item.product.toString(), item.quantity])
+      cart.items.map((item) => [item.product._id.toString(), item.quantity])
     );
 
     // Step3: Get Update and Insert Products separately
@@ -133,7 +133,6 @@ const mergeCart = async (req, res) => {
       await Cart.bulkWrite(updates, {session});
     }
 
-    console.log(inserts);
     // Step 5: Insert new products
     if (inserts.length > 0) {
       await Cart.updateOne(

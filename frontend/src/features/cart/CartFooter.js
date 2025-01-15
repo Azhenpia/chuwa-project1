@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useCheckoutMutation} from '../api/apiSlice';
 import {clearCart} from './cartSlice';
 import {styled} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 
 const Row = styled(Box)(({theme}) => ({
   display: 'flex',
@@ -17,15 +18,21 @@ const Row = styled(Box)(({theme}) => ({
 
 export default function CartFooter() {
   const [checkout, {isLoading}] = useCheckoutMutation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {subtotal, tax, estimatedTotal, discount} = useSelector(
     (state) => state.cart
   );
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const handleCheckout = async () => {
     try {
+      if (!isAuthenticated) {
+        navigate('/login');
+        return;
+      }
       const {message} = await checkout().unwrap();
-      dispatch(clearCart());
       console.log(message);
+      dispatch(clearCart());
     } catch (err) {
       console.error('Failure happened during checkout:', err.message);
     }
