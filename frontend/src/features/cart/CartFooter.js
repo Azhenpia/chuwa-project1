@@ -2,7 +2,7 @@ import CustomFilledBtn from '../../components/FilledBtn';
 import {Box, Typography} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCheckoutMutation} from '../api/apiSlice';
-import {clearCart} from './cartSlice';
+import {clearCart, toggleCart} from './cartSlice';
 import {styled} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 
@@ -33,6 +33,8 @@ export default function CartFooter() {
       const {message} = await checkout().unwrap();
       console.log(message);
       dispatch(clearCart());
+      dispatch(toggleCart());
+      navigate('/', {state: {updated: true}});
     } catch (err) {
       console.error('Failure happened during checkout:', err.message);
     }

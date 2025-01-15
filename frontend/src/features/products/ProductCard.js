@@ -14,6 +14,7 @@ import {updateItemsAsync} from '../cart/cartSlice';
 import {useNavigate} from 'react-router-dom';
 
 function ProductCard({product}) {
+  const {currentUser} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +32,7 @@ function ProductCard({product}) {
   };
 
   return (
-    <Card onClick={handleProductClick}>
+    <Card sx={{width: 225}} onClick={handleProductClick}>
       <CardMedia
         component="img"
         height="140"
@@ -50,11 +51,13 @@ function ProductCard({product}) {
           display: 'flex',
           gap: '8px',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Button
           variant="contained"
           color="primary"
+          disabled={product.stock === 0}
           sx={{
             width: '100px',
             height: '40px',
@@ -62,7 +65,11 @@ function ProductCard({product}) {
             justifyContent: 'center',
             alignItems: 'center',
             textTransform: 'none',
-            backgroundColor: '#5048E5'
+            backgroundColor: '#5048E5',
+            '&.Mui-disabled': {
+              color: 'gray',
+              backgroundColor: 'lightgray',
+            },
           }}
           onClick={(event) => {
             event.stopPropagation();
@@ -101,14 +108,21 @@ function ProductCard({product}) {
             </Box>
           )}
         </Button>
-        <Button
-          size="small"
-          variant="outlined"
-          sx={{width: '100px', height: '40px', color: '#535353', borderColor: '#535353'}}
-          onClick={handleEditClick}
-        >
-          Edit
-        </Button>
+        {currentUser?.role === 'admin' && (
+          <Button
+            size="small"
+            variant="outlined"
+            sx={{
+              width: '100px',
+              height: '40px',
+              color: '#535353',
+              borderColor: '#535353',
+            }}
+            onClick={handleEditClick}
+          >
+            Edit
+          </Button>
+        )}
       </Box>
     </Card>
   );

@@ -31,10 +31,15 @@ export default function QuantityEditBtn({product, setProduct}) {
           variant="contained"
           color="primary"
           fullWidth
+          disabled={product.stock === 0}
           sx={{
             height: '100%',
             textTransform: 'none',
             backgroundColor: '#5048E5',
+            '&.Mui-disabled': {
+              color: 'gray',
+              backgroundColor: 'lightgray',
+            },
           }}
           onClick={(event) => {
             event.stopPropagation();
