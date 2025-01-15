@@ -62,6 +62,7 @@ function ProductCard({product}) {
             justifyContent: 'center',
             alignItems: 'center',
             textTransform: 'none',
+            backgroundColor: '#5048E5'
           }}
           onClick={(event) => {
             event.stopPropagation();
@@ -103,7 +104,7 @@ function ProductCard({product}) {
         <Button
           size="small"
           variant="outlined"
-          sx={{width: '100px', height: '40px'}}
+          sx={{width: '100px', height: '40px', color: '#535353', borderColor: '#535353'}}
           onClick={handleEditClick}
         >
           Edit
