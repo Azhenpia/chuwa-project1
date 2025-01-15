@@ -37,6 +37,14 @@ function Product() {
   const [sortedProducts, setSortedProducts] = useState([]);
   const itemsPerPage = 12;
 
+
+  const location = useLocation(); // 获取整个 location 对象
+  useEffect(() => {
+  if (location.state?.updated) {
+    refetch(); // 重新获取数据
+   }
+ }, [location.state]);
+  
   useEffect(() => {
     if (error) {
       navigate('/error', { state: { hasError: true } });
