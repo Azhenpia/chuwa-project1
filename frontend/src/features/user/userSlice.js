@@ -1,4 +1,4 @@
-import {login, signup} from '../../api/auth';
+import {login, signup, updatePassword} from '../../api/auth';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   currentUser: null,
   loading: false,
+  lookupEmail: null,
 };
 
 export const loginUser = createAsyncThunk(
@@ -38,6 +39,21 @@ export const signupUser = createAsyncThunk(
   }
 );
 
+export const lookupEmail = createAsyncThunk(
+  "user/update-password",
+  async (email, { rejectWithValue }) => {
+    try {
+      return await updatePassword({email});
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      console.log(err.response);
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -50,6 +66,9 @@ const userSlice = createSlice({
       localStorage.removeItem('token');
       state.isAuthenticated = false;
       state.currentUser = null;
+    },
+    resetEmailLookupStatus: (state) => {
+      state.lookupEmail = null;
     },
   },
   extraReducers: (builder) => {
@@ -77,8 +96,22 @@ const userSlice = createSlice({
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
       });
+
+    builder
+      .addCase(lookupEmail.pending, (state) => {
+        state.loading = true;
+        state.lookupEmail = null;
+      })
+      .addCase(lookupEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.lookupEmail = true; 
+      })
+      .addCase(lookupEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.lookupEmail = false; 
+      });
   },
 });
 
-export const {setUser, clearUser} = userSlice.actions;
+export const {setUser, clearUser, resetEmailLookupStatus} = userSlice.actions;
 export default userSlice;
