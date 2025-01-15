@@ -9,13 +9,8 @@ import {
 } from '@mui/material';
 import StepperInput from '../../components/StepperInput';
 
-export default function CartItem({
-  product,
-  quantity,
-  onQuantityChange,
-  onRemove,
-}) {
-  const {_id: id, name, price, imgUrl, stock} = product;
+export default function CartItem({product, quantity, onQuantityChange}) {
+  const {name, price, imgUrl, stock} = product;
   const Row = styled(Box)(({theme}) => ({
     display: 'flex',
     justifyContent: 'space-between',

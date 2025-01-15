@@ -3,18 +3,22 @@ import FilledBtn from '../../components/FilledBtn';
 import InputField from '../../components/InputField';
 import {Link, useNavigate} from 'react-router-dom';
 import '../../styles/AuthForm.css';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {setUser, loginUser} from '../../features/user/userSlice';
 import {jwtDecode} from 'jwt-decode';
 import {CircularProgress} from '@mui/material';
+import {useMergeCartMutation} from '../../features/api/apiSlice';
+import {updateCart} from '../../features/cart/cartSlice';
 
 export default function LoginPage() {
+  const items = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [mergeCart] = useMergeCartMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +33,16 @@ export default function LoginPage() {
       const {token} = await unwrapResult(result);
       const decoded = jwtDecode(token);
       dispatch(setUser(decoded));
+
+      const products = items?.map((item) => ({
+        productId: item.product._id,
+        quantity: item.quantity,
+      }));
+      console.log(items);
+      if (products?.length > 0) {
+        const {data} = await mergeCart(products);
+        dispatch(updateCart(data.cart));
+      }
 
       console.log('Login Successful');
       setTimeout(() => {
