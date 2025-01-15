@@ -38,7 +38,6 @@ export default function LoginPage() {
         productId: item.product._id,
         quantity: item.quantity,
       }));
-      console.log(items);
       if (products?.length > 0) {
         const {data} = await mergeCart(products);
         dispatch(updateCart(data.cart));
