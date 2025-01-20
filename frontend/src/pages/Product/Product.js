@@ -34,11 +34,15 @@ function Product() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortOption, setSortOption] = useState('Price: low to high');
-  const [currentPage, setCurrentPage] = useState(1);
+  //const [currentPage, setCurrentPage] = useState(1);
+  
   const [sortedProducts, setSortedProducts] = useState([]);
   const itemsPerPage = 12;
 
   const location = useLocation(); // 获取整个 location 对象
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page')) || 1; // 从查询参数获取页码，默认为1
+  const [currentPage, setCurrentPage] = useState(initialPage);//lz
   useEffect(() => {
     if (location.state?.updated) {
       refetch(); // 重新获取数据
@@ -68,6 +72,7 @@ function Product() {
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
+    navigate(`?page=${value}`); // 更新查询参数lz
   };
 
   const handleSortClick = (event) => {
