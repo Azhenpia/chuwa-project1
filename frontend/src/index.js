@@ -8,6 +8,8 @@ import store from './store/store';
 import {setUser} from './features/user/userSlice';
 import {jwtDecode} from 'jwt-decode';
 
+import { ApolloProvider } from '@apollo/client';
+import client from './ApolloClient';
 if (localStorage.getItem('token')) {
   const decoded = jwtDecode(localStorage.getItem('token'));
   store.dispatch(setUser(decoded));
@@ -17,7 +19,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+    <ApolloProvider client={client}>
       <App />
+      </ApolloProvider>,
     </Provider>
   </React.StrictMode>
 );

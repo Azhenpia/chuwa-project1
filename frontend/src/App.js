@@ -62,3 +62,72 @@ function App() {
 }
 
 export default App;
+//-----------------------------------------------------------------------------------------
+// import "./App.css";
+// import { styled } from "@mui/material/styles";
+// import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+// import React, { useState } from 'react';
+// import { Button, Box, Typography } from '@mui/material';
+// import { FullscreenExit } from "@mui/icons-material";
+// import { blue } from "@mui/material/colors";
+
+// const VisuallyHiddenInput = styled("input")({
+//   clip: "rect(0 0 0 0)",
+//   clipPath: "inset(50%)",
+//   height: 1,
+//   overflow: "hidden",
+//   position: "absolute",
+//   bottom: 0,
+//   left: 0,
+//   whiteSpace: "nowrap",
+//   width: 1,
+// });
+// export default function App() {
+    
+//     const [fileName, setFileNames] = useState([]);
+  
+//     const handleFileChange = (event) => {
+//       const files = Array.from(event.target.files).map((file) => file.name);
+//       setFileNames(files);
+//     };
+
+//   return (
+//     <div className="App"  style={{
+//       display: 'flex',
+//       flexDirection: 'column',
+//       alignItems: 'center',
+//       marginTop: '50px',
+//     }}>
+//       <h1>Visa Status Management</h1>
+
+//       <div >
+//         <span style={{width:'30%',fontSize:'25px',color:'blue',fontWeight: 'bold',textAlign: 'center'}}>OPT Receipt</span>
+//         <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+//         <Typography variant="body2">
+//             {fileName}
+//           </Typography>
+//       <Button
+//         component="label"
+//         role={undefined}
+//         variant="contained"
+//         tabIndex={-1}
+//         startIcon={<CloudUploadIcon />}
+//       >
+//         Upload files
+//         <VisuallyHiddenInput
+//           type="file"
+//           onChange={handleFileChange}
+//           multiple
+//         />
+         
+//       </Button>
+//       </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// Import necessary libraries
+
+
+// Helper function for dialog confirmation

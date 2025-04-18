@@ -5,6 +5,7 @@ const cartRouter = require('./routes/cartRoutes');
 const errorHandlerMiddleware = require('./middleware/errorHandler');
 const connectDB = require('./config/db');
 var cors = require('cors');
+const createGraphQLServer = require('./models/graphql');
 const app = express();
 const port = 4000;
 
@@ -18,5 +19,7 @@ app.use('/auth', authRouter);
 app.use('/cart', cartRouter);
 app.use('/products', productRouter);
 app.use(errorHandlerMiddleware);
+
+createGraphQLServer(app);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

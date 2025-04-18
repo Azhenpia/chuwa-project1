@@ -16,6 +16,20 @@ import {
 } from '../../features/api/apiSlice';
 import {useSelector} from 'react-redux';
 
+import { ApolloProvider, useQuery, gql } from "@apollo/client";
+import client from "../../ApolloClient";
+const GET_HELLO = gql`
+  query {
+  products {
+    name
+    price
+    stock
+    imgUrl
+  }
+}
+
+`;
+
 const style = {
   productGrid: {
     display: 'flex',
@@ -26,19 +40,27 @@ const style = {
 };
 
 function Product() {
+  
+
+  const { loading, error: error1, data: data1 } = useQuery(GET_HELLO);
   const {items} = useSelector((state) => state.cart);
   const {data, error, isLoading, refetch} = useFetchProductsQuery({});
+  
   const [updateCart] = useUpdateCartMutation();
   const navigate = useNavigate();
   const {currentUser} = useSelector((state) => state.user);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortOption, setSortOption] = useState('Price: low to high');
-  const [currentPage, setCurrentPage] = useState(1);
+  //const [currentPage, setCurrentPage] = useState(1);
+  
   const [sortedProducts, setSortedProducts] = useState([]);
   const itemsPerPage = 12;
 
   const location = useLocation(); // 获取整个 location 对象
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page')) || 1; // 从查询参数获取页码，默认为1
+  const [currentPage, setCurrentPage] = useState(initialPage);//lz
   useEffect(() => {
     if (location.state?.updated) {
       refetch(); // 重新获取数据
@@ -68,6 +90,7 @@ function Product() {
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
+    navigate(`?page=${value}`); // 更新查询参数lz
   };
 
   const handleSortClick = (event) => {
@@ -109,6 +132,14 @@ function Product() {
   const endIndex = startIndex + itemsPerPage;
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
 
+  //- 获取前三个产品的信息，用于在页面上方展示
+
+
+  if (error1) return <p>Error: {error1.message}</p>;
+
+  // 此时 data1 一定有值
+  const firstThreeProducts = data1.products.slice(0, 3);
+
   return (
     <Box
       sx={{
@@ -120,6 +151,20 @@ function Product() {
         padding: '0 50px',
       }}
     >
+      
+      {/* <div>
+        {firstThreeProducts.map((product, index) => (
+          <div key={index} style={{ marginBottom: '20px' }}>
+            <h3>{product.name}</h3>
+            <p>价格: {product.price}</p>
+            <p>库存: {product.stock}</p>
+            <img src={product.imgUrl} alt={product.name} style={{ width: '150px' }} />
+          </div>
+        ))}
+      </div> */}
+
+
+
       <Box sx={{mt: 4, width: '100%', height: '100%', position: 'relative'}}>
         <Box
           sx={{
